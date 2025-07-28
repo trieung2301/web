@@ -25,31 +25,45 @@
         const outOfStock = item.stock === 0 || quantity === 0;
         const outOfStockText = outOfStock ? `<div class="out-of-stock">Hết hàng</div>` : '';
 
+        // Nếu có autoSelected thì checkbox sẽ được tick sẵn
+        const isChecked = cartItem.autoSelected ? 'checked' : '';
+
         const row = `
-        <tr>
-            <td>
-                <input type="checkbox" class="item-checkbox" data-index="${index}" ${outOfStock ? 'disabled' : ''}>
-            </td>
-            <td>
-                <img src="${item.imageUrl}" alt="${item.name}" style="width:50px; vertical-align: middle;">
-                <div style="display:inline-block; margin-left: 10px;">
-                    ${item.name}
-                    ${outOfStockText}
-                </div>
-            </td>
-            <td>₫${item.price.toLocaleString('vi-VN')}</td>
-            <td>${quantity}</td>
-            <td>₫${subtotal.toLocaleString('vi-VN')}</td>
-            <td><button onclick="removeFromCart(${index})">Xoá</button></td>
-        </tr>
-        `;
+<tr data-index="${index}">
+    <td>
+        <input type="checkbox" class="item-checkbox" data-index="${index}" ${outOfStock ? 'disabled' : ''} ${isChecked}>
+    </td>
+    <td class="item-name">
+        <img src="${item.imageUrl}" alt="${item.name}" style="width:50px; vertical-align: middle;">
+        <div style="display:inline-block; margin-left: 10px;">
+            ${item.name}
+            ${outOfStockText}
+        </div>
+    </td>
+    <td class="item-price">₫${item.price.toLocaleString('vi-VN')}</td>
+    <td><input type="number" class="item-quantity" value="${quantity}" min="1" data-index="${index}"></td>
+
+    <td class="item-total">₫${subtotal.toLocaleString('vi-VN')}</td>
+    <td><button onclick="removeFromCart(${index})">Xoá</button></td>
+</tr>
+`;
 
         cartBody.innerHTML += row;
+
+        // Xoá autoSelected sau khi render để không lưu mãi
+        if (cartItem.autoSelected) {
+            cartItem.autoSelected = false;
+        }
     });
+
+    // Cập nhật cart sau khi xóa autoSelected
+    localStorage.setItem('cart', JSON.stringify(cartItems));
 
     cartTotalEl.textContent = `₫${total.toLocaleString('vi-VN')}`;
     attachCheckboxListeners();
+    attachQuantityListeners();
 }
+
 
 function removeFromCart(index) {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -74,6 +88,28 @@ function attachCheckboxListeners() {
         cb.addEventListener('change', updateSummary);
     });
 }
+function attachQuantityListeners() {
+    const quantityInputs = document.querySelectorAll('.item-quantity');
+    quantityInputs.forEach(input => {
+        input.addEventListener('change', (e) => {
+            const index = parseInt(input.getAttribute('data-index'));
+            const newQuantity = parseInt(e.target.value);
+            if (newQuantity < 1 || isNaN(newQuantity)) {
+                alert("Số lượng không hợp lệ.");
+                renderCartTable(); // render lại để khôi phục số lượng cũ
+                return;
+            }
+
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart[index].quantity = newQuantity;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCartTable();
+            updateCartCount();
+            updateSummary();
+        });
+    });
+}
+
 
 function updateSummary() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -84,9 +120,13 @@ function updateSummary() {
     checkboxes.forEach(cb => {
         if (cb.checked) {
             const index = parseInt(cb.getAttribute('data-index'));
-            const item = cart[index];
-            totalItems += item.quantity;
-            totalAmount += item.price * item.quantity;
+            const cartItem = cart[index];
+            const item = allItemsData.find(p => p.id === cartItem.id); // 💡 sửa chỗ này
+
+            if (!item) return;
+
+            totalItems += cartItem.quantity;
+            totalAmount += item.price * cartItem.quantity; // 💡 dùng item.price từ allItemsData
         }
     });
 
@@ -94,11 +134,32 @@ function updateSummary() {
     document.getElementById('totalAmount').textContent = `₫${totalAmount.toLocaleString('vi-VN')}`;
 }
 
-function checkout() {
-    alert("Bạn đã nhấn nút Mua hàng!");
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     renderCartTable();
     updateSummary();
 });
+function checkout() {
+    const checkboxes = document.querySelectorAll('#cartBody input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) {
+        alert("Vui lòng chọn ít nhất một sản phẩm để mua.");
+        return;
+    }
+
+    const selectedItems = [];
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    checkboxes.forEach(checkbox => {
+        const row = checkbox.closest('tr');
+        const index = parseInt(row.getAttribute('data-index'));
+        const selectedItem = cart[index];
+        if (selectedItem) {
+            selectedItems.push(selectedItem);
+        }
+    });
+
+    localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+    localStorage.setItem('allItemsData', JSON.stringify(allItemsData));
+    window.location.href = 'purchase.html';
+}
+
+

@@ -1041,3 +1041,143 @@ table#cartTable {
     flex-grow: 1;
     text-align: center;
 }
+.checkout-page {
+    padding: 30px;
+    background-color: #f9f9f9;
+    font-family: sans-serif;
+}
+
+.checkout-form {
+    max-width: 1000px;
+    margin: auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ddd;
+}
+
+.billing-shipping-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.billing-details,
+.additional-info {
+    flex: 1 1 45%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+textarea {
+    min-height: 80px;
+}
+
+.order-review {
+    margin-top: 30px;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .order-table th,
+    .order-table td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+    }
+
+.payment-methods {
+    margin-top: 30px;
+}
+
+    .payment-methods label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+.place-order {
+    margin-top: 30px;
+}
+
+    .place-order button {
+        background-color: #0a74da;
+        color: white;
+        padding: 12px 25px;
+        font-size: 1em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+.orders-grid {
+    display: grid;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.order-item {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #fff;
+}
+
+    .order-item .product {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+        .order-item .product img {
+            border-radius: 6px;
+        }
+
+    .order-item .info {
+        flex: 1;
+    }
+.policy-page {
+    max-width: 800px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    line-height: 1.6;
+}
+
+    .policy-page h2 {
+        margin-bottom: 20px;
+        font-size: 28px;
+        color: #333;
+    }
+
+    .policy-page h3 {
+        margin-top: 25px;
+        font-size: 20px;
+        color: #444;
+    }
+
+    .policy-page p {
+        margin-bottom: 15px;
+    }

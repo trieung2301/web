@@ -2,9 +2,9 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Giỏ Hàng</title>
+    <title>Lịch Sử Mua Hàng</title>
     <link rel="stylesheet" href="../Css/style.css">
-<style>
+    <style>
         /* CSS để footer luôn ở cuối trang */
         html, body {
             height: 100%; /* Đảm bảo html và body chiếm toàn bộ chiều cao màn hình */
@@ -38,64 +38,6 @@
         .header, .nav {
             flex-shrink: 0; /* Đảm bảo chúng không co giãn */
         }
-
-        /* Bổ sung CSS cho phần tổng cộng giỏ hàng để nó hiển thị rõ ràng */
-        .cart-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            border-top: 1px solid #eee;
-            background-color: #f9f9f9;
-            margin-top: 20px; /* Tạo khoảng cách với bảng giỏ hàng */
-            border-radius: 5px;
-        }
-
-        .cart-footer label {
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-        }
-
-        .cart-footer #selectAll {
-            margin-right: 10px;
-        }
-
-        .cart-footer #cartSummary {
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-
-        .cart-footer .checkout-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .cart-footer .checkout-btn:hover {
-            background-color: #0056b3;
-        }
-
-        /* Đảm bảo bảng giỏ hàng có chiều rộng hợp lý */
-        #cartTable {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px; /* Khoảng cách với cart-footer */
-        }
-
-        #cartTable th, #cartTable td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        #cartTable th {
-            background-color: #f2f2f2;
-        }
     </style>
 </head>
 <body>
@@ -118,7 +60,7 @@
                 <li><a href="category.html" id="categoriesNavLink">Danh mục</a></li>
                 <li><a href="flash-sale.html" id="flashSaleNavLink">Flash Sale</a></li>
                 <li><a href="top-deal.html" id="topDealNavLink">Top Deal</a></li>
-                <li><a href="purchasehistory.html">Lịch Sử Mua Hàng</a></li>
+                <li><a href="purchasehistory.html" class="current-page">Lịch Sử Mua Hàng</a></li>
             </ul>
             <div class="cart-icon" id="cart-icon">
                 <a href="cart.html">
@@ -129,41 +71,76 @@
             </div>
         </div>
     </nav>
-    <main class="cart-page">
-        <div class="container">
-            <table id="cartTable">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" onclick="toggleSelectAll(this)" /></th>
-                        <th>Sản phẩm</th>
-                        <th>Đơn giá</th>
-                        <th>Số lượng</th>
-                        <th>Số tiền</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody id="cartBody">
-                    </tbody>
-            </table>
-            <div class="cart-footer">
-                <label>
-                    <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)">
-                    Chọn Tất Cả
-                </label>
-                <span id="cartSummary">
-                    Tổng cộng (<span id="totalItems">0</span> sản phẩm): <strong id="totalAmount">₫0</strong>
-                </span>
-                <button class="checkout-btn" onclick="checkout()">Mua Hàng</button>
-            </div>
 
-            <div class="cart-total" style="display:none">
-                <strong>Tổng cộng: </strong><span id="cartTotal">₫0</span>
-            </div>
-        </div>
+    <main class="history-page">
+        <div id="ordersContainer" class="orders-grid"></div>
     </main>
-</body>
+    <script src="../JavaScript/products.js"></script>
+    <script src="../JavaScript/saveorder.js"></script>
+    <script src="../JavaScript/cart.js"></script>
+    <script src="../JavaScript/cart-table.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const orders = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
+            const container = document.getElementById("ordersContainer");
 
-<footer class="footer">
+            if (orders.length === 0) {
+                container.innerHTML = "<p>Chưa có đơn hàng nào.</p>";
+                return;
+            }
+            const allItemsData = JSON.parse(localStorage.getItem("allItemsData")) || [];
+
+            orders.forEach((order, index) => {
+                const orderDiv = document.createElement("div");
+                orderDiv.className = "order-item";
+
+                let itemsHTML = "";
+                order.items.forEach(cartItem => {
+                    const itemData = allItemsData.find(p => p.id === cartItem.id);
+                    if (itemData) {
+                        itemsHTML += `
+                        <div class="product">
+                            <img src="${itemData.imageUrl}" alt="${itemData.name}" width="100">
+                            <div class="info">
+                                <strong>${itemData.name}</strong><br>
+                                Số lượng: ${cartItem.quantity}<br>
+                                Giá: ₫${(itemData.price * cartItem.quantity).toLocaleString("vi-VN")}
+                            </div>
+                        </div>
+                    `;
+                    } else {
+                        itemsHTML += `
+                        <div class="product">
+                            <div class="info">
+                                <strong>Sản phẩm không còn khả dụng (ID: ${cartItem.id})</strong><br>
+                                Số lượng: ${cartItem.quantity}<br>
+                                Giá: ₫${(cartItem.price * cartItem.quantity).toLocaleString("vi-VN")}
+                            </div>
+                        </div>
+                        `;
+                    }
+                });
+
+                orderDiv.innerHTML = `
+                <div class="order-summary">
+                    <p><strong>Họ tên:</strong> ${order.name}</p>
+                    <p><strong>Địa chỉ:</strong> ${order.address}</p>
+                    <p><strong>Ngày đặt:</strong> ${order.date}</p>
+                    <button onclick="viewOrder(${index})">Xem chi tiết</button>
+                </div>
+                <div class="products">${itemsHTML}</div>
+            `;
+
+                container.appendChild(orderDiv);
+            });
+        });
+
+        function viewOrder(index) {
+            localStorage.setItem("viewOrderIndex", index);
+            window.location.href = "purchase.html";
+        }
+    </script>
+    <footer class="footer">
         <div class="footer-content">
             <p>Bản quyền © 2025 Shop Demo</p>
             <div class="contact-links">
@@ -179,7 +156,5 @@
             </div>
         </div>
     </footer>
-    <script src="../JavaScript/products.js"></script>
-    <script src="../JavaScript/cart.js"></script>
-    <script src="../JavaScript/cart-table.js"></script>
+</body>
 </html>
