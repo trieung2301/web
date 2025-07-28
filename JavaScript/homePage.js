@@ -10,10 +10,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Kiểm tra URL và thêm class cho link Trang chủ
     const currentPath = location.pathname.split('/').pop(); // Lấy phần cuối của đường dẫn
-
-    // Nếu đang ở trang chủ (index.html hoặc không có tên file)
-    if (currentPath === '' || currentPath === 'index.html') {
-        updateNavLinkHighlight(homepageNavLink); // Sử dụng hàm từ navigation.js
-    }
-
 });
