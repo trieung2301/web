@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Demo - Trang chủ</title>
+    <link rel="stylesheet" href="../Css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcS-HdfgUSCDmV_LNqOxasca8KcceWStGP_A&s" alt="Logo Shop" height="40">
+            </a>
+            <form class="search-form" id="searchForm">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." />
+                <button type="submit">🔍</button>
+            </form>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="index.html">Trang chủ</a></li>
+                <li><a href="category.html" id="categoriesNavLink">Danh mục</a></li>
+                <li><a href="flash-sale.html">Flash Sale</a></li>
+                <li><a href="top-deal.html">Top Deal</a></li>
+            </ul>
+            <div class="cart-icon" id="cart-icon">
+                <a href="cart.html">
+                    🛒 Giỏ hàng
+                    <span id="cart-count">(0)</span>
+                </a>
+                <div class="mini-cart" id="mini-cart"></div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="products">
+        <div class="container">
+            <h2 style="text-align:center;margin-bottom: 16px; color:red;" id="productSectionTitle">Sản phẩm nổi bật</h2>
+            <div class="grid" id="productGrid">
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Bản quyền © 2025 Shop Demo</p>
+            <div class="contact-links">
+                <ul>
+                    <li><a href="" target="_blank">Facebook</a></li>
+                    <li><a href="tel:+84123456789">Số điện thoại: 08 3334 3334</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../JavaScript/products.js"></script>
+    <script src="../JavaScript/flashSale.js"></script>
+    <script src="../JavaScript/navigation.js"></script>
+    <script src="../JavaScript/homePage.js"></script>
+    <script src="../JavaScript/searchHandler.js"></script>
+    <script src="../JavaScript/cart.js"></script>
+    <script src="../JavaScript/cart-table.js"></script>
+</body>
+</html>

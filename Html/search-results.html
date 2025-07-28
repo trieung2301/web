@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Kết quả tìm kiếm - Shop Demo</title>
+    <link rel="stylesheet" href="../Css/Style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcS-HdfgUSCDmV_LNqOxasca8KcceWStGP_A&s" alt="Logo Shop" height="40">
+            </a>
+            <form class="search-form" id="searchForm"> <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." />
+                <button type="submit">🔍</button>
+            </form>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <ul class="nav-list">
+            <li><a href="index.html" id="homeNavLink">Trang chủ</a></li>
+            <li><a href="category.html" id="categoriesNavLink">Danh mục</a></li>
+            <li><a href="flash-sale.html" id="flashSaleNavLink">Flash Sale</a></li>
+            <li><a href="top-deal.html">Top Deal</a></li>
+        </ul>
+    </nav>
+
+    <section class="products">
+        <div class="container">
+            <h2 id="searchResultsTitle">Kết quả tìm kiếm</h2>
+
+            <div class="search-controls">
+                <div class="filter-group">
+                    <label for="searchQueryFilter">Tên sản phẩm:</label>
+                    <input type="text" id="searchQueryFilter" placeholder="Nhập tên sản phẩm...">
+                </div>
+                <div class="filter-group">
+                    <label for="categoryFilter">Danh mục:</label>
+                    <select id="categoryFilter">
+                        <option value="">Tất cả</option>
+                        </select>
+                </div>
+                <div class="filter-group">
+                    <label for="minPriceFilter">Giá từ:</label>
+                    <input type="number" id="minPriceFilter" placeholder="Min">
+                </div>
+                <div class="filter-group">
+                    <label for="maxPriceFilter">Đến:</label>
+                    <input type="number" id="maxPriceFilter" placeholder="Max">
+                </div>
+                <div class="filter-group">
+                    <label for="sortOrderFilter">Sắp xếp theo giá:</label>
+                    <select id="sortOrderFilter">
+                        <option value="">Mặc định</option>
+                        <option value="asc">Giá thấp đến cao</option>
+                        <option value="desc">Giá cao đến thấp</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="flashSaleFilter">Đang giảm giá:</label>
+                    <input type="checkbox" id="flashSaleFilter" style="width: auto; margin-top: 8px;">
+                </div>
+                <button id="applyFiltersBtn">Áp dụng bộ lọc</button>
+                <button id="resetFiltersBtn" style="background-color: #6c757d;">Đặt lại bộ lọc</button>
+            </div>
+
+            <div class="grid" id="productGrid">
+                </div>
+            <div id="noResultsMessage" style="display:none;">
+                <p>Không tìm thấy sản phẩm nào phù hợp với tiêu chí tìm kiếm của bạn.</p>
+                <p>Vui lòng thử lại với các từ khóa hoặc bộ lọc khác.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Bản quyền © 2025 Shop Demo</p>
+            <div class="contact-links">
+                <ul>
+                    <li><a href="" target="_blank">Facebook</a></li>
+                    <li><a href="tel:+84123456789">Số điện thoại: 08 3334 3334</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../JavaScript/products.js"></script>
+    <script src="../JavaScript/flashSale.js"></script> 
+    <script src="../JavaScript/navigation.js"></script>
+    <script src="../JavaScript/searchResults.js"></script>
+    <script src="../JavaScript/searchHandler.js"></script> 
+</body>
+</html>
