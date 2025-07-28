@@ -22,6 +22,15 @@ body {
 }
 
 /* Header */
+
+.header .shop-name {
+    color: white; 
+    font-size: 1.2em; 
+    font-weight: bold;
+    white-space: nowrap; 
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
 .header {
     background: #FF5722;
     padding: 12px 0;
