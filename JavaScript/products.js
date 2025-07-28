@@ -117,7 +117,7 @@ class Item {
 
 // Để thay đổi/kích hoạt Flash Sale, cần chỉnh sửa giá trị này VÀ deploy lại code.
 // Tháng bắt từ 0 (Tháng 1 là 0).          năm,tháng,ngày,giờ,phút,giây
-const GLOBAL_FLASH_SALE_END_TIME = new Date(2025, 7 - 1, 27, 19, 41, 59).toISOString();
+const GLOBAL_FLASH_SALE_END_TIME = new Date(2025, 8 - 1, 8, 19, 59, 59).toISOString();
 // const GLOBAL_FLASH_SALE_END_TIME = null; // Tắt flash sale
 
 // =====================================================================
