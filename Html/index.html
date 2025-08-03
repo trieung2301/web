@@ -11,11 +11,18 @@
         <div class="container">
             <a href="index.html" class="logo">
                 <img src="https://tse3.mm.bing.net/th/id/OIP.IhOrqGoCi8SNaOHRVsw-VQHaHa?pid=Api&P=0&h=220" alt="Logo Shop" height="40">
-                <span class="shop-name">Shop Demo</span> </a>
+                <span class="shop-name">Shop Demo</span>
+            </a>
             <form class="search-form" id="searchForm">
                 <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." />
                 <button type="submit">🔍</button>
             </form>
+            <div class="user-area">
+                <a href="login.html" id="loginLink">Đăng nhập</a>
+                <a href="register.html" id="registerLink">Đăng ký</a>
+                <a href="javascript:void(0);" id="logoutLink" onclick="handleLogout()" style="display:none;">Đăng xuất</a>
+                <a href="admin-panel.html" id="adminPanelLink" style="display:none;">Admin</a>
+            </div>
         </div>
     </header>
 
@@ -42,6 +49,13 @@
         <div class="container">
             <h2 style="text-align:center;margin-bottom: 16px; color:red;" id="productSectionTitle">Sản phẩm nổi bật</h2>
             <div class="grid" id="productGrid">
+                <p>Đây là khu vực sản phẩm. Bạn cần đảm bảo products.js hiển thị sản phẩm tại đây.</p>
+            </div>
+
+            <div id="adminFunctionality" style="display:none;">
+                <h3>Chức năng dành cho Admin</h3>
+                <p>Nội dung chỉ Admin thấy.</p>
+                <button onclick="alert('Admin đã thực hiện chức năng!');">Thực hiện tác vụ Admin</button>
             </div>
         </div>
     </section>
@@ -55,7 +69,6 @@
                     <li><a href="tel:+84123456789">Số điện thoại: 08 3334 3334</a></li>
                 </ul>
             </div>
-
             <div class="contact-links">
                 <a href="policy.html" style="margin: 0 10px;">Chính sách mua hàng</a>
                 <a href="policy-protect.html" style="margin: 0 10px;">Chính sách bảo mật</a>
@@ -70,5 +83,6 @@
     <script src="../JavaScript/searchHandler.js"></script>
     <script src="../JavaScript/cart.js"></script>
     <script src="../JavaScript/cart-table.js"></script>
+    <script src="../JavaScript/user.js"></script>
 </body>
 </html>

@@ -2,54 +2,27 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title> Shop Demo - Thanh toán</title>
+    <title>Shop Demo - Thanh toán</title>
     <link rel="stylesheet" href="../Css/style.css">
-<style>
-        /* CSS để footer luôn ở cuối trang */
-        html, body {
-            height: 100%; /* Đảm bảo html và body chiếm toàn bộ chiều cao màn hình */
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            display: flex; /* Biến body thành container flex */
-            flex-direction: column; /* Sắp xếp các mục con theo cột */
-            min-height: 100vh; /* Đảm bảo body ít nhất là cao bằng viewport */
-        }
-
-        /* Đảm bảo phần nội dung chính của bạn (main) chiếm không gian còn lại */
-        main {
-            flex: 1; /* Cho phép main tự động mở rộng để lấp đầy không gian còn lại */
-            padding: 20px 0; /* Ví dụ padding, bạn có thể điều chỉnh */
-        }
-
-        .footer {
-            /* Footer sẽ tự động nằm cuối cùng */
-            background-color: #333; /* Màu nền footer, ví dụ */
-            color: white; /* Màu chữ footer, ví dụ */
-            padding: 20px;
-            text-align: center;
-            width: 100%; /* Đảm bảo footer chiếm toàn bộ chiều rộng */
-            flex-shrink: 0; /* Đảm bảo footer không co lại */
-        }
-
-        /* Các phần tử khác như header, nav sẽ giữ nguyên kích thước mặc định */
-        .header, .nav {
-            flex-shrink: 0; /* Đảm bảo chúng không co giãn */
-        }
-    </style>
+    
 </head>
 <body>
     <header class="header">
         <div class="container">
             <a href="index.html" class="logo">
                 <img src="https://tse3.mm.bing.net/th/id/OIP.IhOrqGoCi8SNaOHRVsw-VQHaHa?pid=Api&P=0&h=220" alt="Logo Shop" height="40">
-                <span class="shop-name">Shop Demo</span> </a>
+                <span class="shop-name">Shop Demo</span>
+            </a>
             <form class="search-form" id="searchForm">
                 <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." />
                 <button type="submit">🔍</button>
             </form>
+            <div class="user-area">
+                <a href="login.html" id="loginLink">Đăng nhập</a>
+                <a href="register.html" id="registerLink">Đăng ký</a>
+                <a href="javascript:void(0);" id="logoutLink" onclick="handleLogout()" style="display:none;">Đăng xuất</a>
+                <a href="admin-panel.html" id="adminPanelLink" style="display:none;">Admin</a>
+            </div>
         </div>
     </header>
 
@@ -71,9 +44,12 @@
             </div>
         </div>
     </nav>
+
     <main class="checkout-page">
+        <div class="container" id="orderDetailsContainer">
+            </div>
+
         <form id="checkoutForm" class="checkout-form">
-            <!-- THÔNG TIN THANH TOÁN -->
             <div class="billing-shipping-grid">
                 <div class="billing-details">
                     <h2>Thông tin thanh toán</h2>
@@ -122,7 +98,6 @@
                     </div>
                 </div>
 
-                <!-- GHI CHÚ ĐƠN HÀNG -->
                 <div class="additional-info">
                     <h2>Thông tin bổ sung</h2>
                     <div class="form-group">
@@ -132,7 +107,6 @@
                 </div>
             </div>
 
-            <!-- DANH SÁCH SẢN PHẨM -->
             <div class="order-review">
                 <h2>Đơn hàng của bạn</h2>
                 <table class="order-table" id="selectedItemsTable">
@@ -143,8 +117,7 @@
                         </tr>
                     </thead>
                     <tbody id="itemsBody">
-                        <!-- JS sẽ đẩy sản phẩm vào đây -->
-                    </tbody>
+                        </tbody>
                     <tfoot>
                         <tr>
                             <th>Tạm tính</th>
@@ -158,26 +131,22 @@
                 </table>
             </div>
 
-            <!-- PHƯƠNG THỨC THANH TOÁN -->
             <div class="payment-methods">
                 <h2>Phương thức thanh toán</h2>
-                <label><input type="radio" name="payment" value="cod"> Thanh toán khi nhận hàng</label>
+                <label><input type="radio" name="payment" value="cod" checked> Thanh toán khi nhận hàng</label>
             </div>
 
-            <!-- NÚT ĐẶT HÀNG -->
             <div class="place-order">
                 <button type="button" onclick="submitOrder()">Đặt hàng</button>
             </div>
         </form>
     </main>
+
     <script src="../JavaScript/products.js"></script>
     <script src="../JavaScript/searchHandler.js"></script>
-    <script src="../JavaScript/order.js"></script>
+    <script src="../JavaScript/user.js"></script> <script src="../JavaScript/cart.js"></script>
     <script src="../JavaScript/cart-table.js"></script>
-    <script src="../JavaScript/saveorder.js"></script>
-</body>
-
-<footer class="footer">
+    <script src="../JavaScript/saveorder.js"></script> <footer class="footer">
         <div class="footer-content">
             <p>Bản quyền © 2025 Shop Demo</p>
             <div class="contact-links">
@@ -193,5 +162,5 @@
             </div>
         </div>
     </footer>
-
+</body>
 </html>

@@ -23,8 +23,6 @@ class Item {
     }
 
     isFlashSaleActive() {
-        // Kiểm tra nếu GLOBAL_FLASH_SALE_END_TIME được set là null (Flash Sale không hoạt động)
-        // hoặc sản phẩm không được đánh dấu là flash sale
         if (!this.isFlashSale || GLOBAL_FLASH_SALE_END_TIME === null) {
             return false;
         }
@@ -58,7 +56,7 @@ class Item {
         }
 
         if (this.soldQuantity > 0) {
-            soldQuantityHtml = `<p class="sold-quantity">Đã bán: ${this.soldQuantity}</p>`; // Đã bỏ chữ "sản phẩm"
+            soldQuantityHtml = `<p class="sold-quantity">Đã bán: ${this.soldQuantity}</p>`; 
         }
 
 
@@ -115,13 +113,7 @@ class Item {
 }
 
 
-// Để thay đổi/kích hoạt Flash Sale, cần chỉnh sửa giá trị này VÀ deploy lại code.
-// Tháng bắt từ 0 (Tháng 1 là 0).          năm,tháng,ngày,giờ,phút,giây
 const GLOBAL_FLASH_SALE_END_TIME = new Date(2025, 8 - 1, 8, 19, 59, 59).toISOString();
-// const GLOBAL_FLASH_SALE_END_TIME = null; // Tắt flash sale
-
-// =====================================================================
-
 
 const allItemsData = [
     new Item(1, "Set áo thun nam thời trang", 433000, "https://tse1.mm.bing.net/th/id/OIP.1sms3hTuDDg9BhIntSl9LQHaHa?pid=Api&P=0&h=220", "Set áo thun nam cao cấp, chất liệu cotton thoáng mát, phù hợp mặc đi chơi, đi làm. Nhiều màu sắc lựa chọn.", "Thời trang nam", 100, true, 433000, 350000, 50),
@@ -130,7 +122,7 @@ const allItemsData = [
     new Item(3, "Gấu bông mềm mại", 150000, "https://tse3.mm.bing.net/th/id/OIP.qmxyNfSnnBmkrqDF_NpVeAHaHa?pid=Api&P=0&h=220", "Gấu bông chất liệu nhung mềm mại, an toàn cho trẻ em. Thích hợp làm quà tặng.", "Đồ chơi", 150, false, null, null, 120),
     new Item(5, "Card Màn Hình VGA MSI GeForce RTX 5090 32G VENTUS 3X OC", 96400000, "https://m.media-amazon.com/images/I/715PJSwhFBL._AC_UY218_.jpg", "Card đồ họa hiệu năng cực cao dành cho game thủ và người làm đồ họa chuyên nghiệp.", "Thiết bị điện tử", 50, false, null, null, 5),
     new Item(6, "Bộ vi xử lý AMD Ryzen 9 9900X3D", 20355000, "https://m.media-amazon.com/images/I/51iH16H8wgL._AC_UY218_.jpg", "CPU mạnh mẽ từ AMD, tối ưu cho gaming và các tác vụ đa nhiệm nặng.", "Thiết bị điện tử", 75, false, null, null, 15),
-    new Item(7, "Tai nghe Bluetooth không dây cao cấp", 450000, "https://up.yimg.com/ib/th/id/OIP.b2u2qTY04OKLkxjLJ5W_SQHaHa?pid=Api&rs=1&c=1&qlt=95&w=121&h=121", "Tai nghe không dây chất lượng âm thanh HD, pin trâu, kết nối ổn định.", "Thiết bị điện tử", 200, false, null, null, 90),
+    new Item(7, "Tai nghe Bluetooth không dây cao cấp", 450000, "https://up.yimg.com/ib/th/id/OIP.b2u2qTY04OKKkxjLJ5W_SQHaHa?pid=Api&rs=1&c=1&qlt=95&w=121&h=121", "Tai nghe không dây chất lượng âm thanh HD, pin trâu, kết nối ổn định.", "Thiết bị điện tử", 200, false, null, null, 90),
     new Item(8, "Loa Bluetooth di động chống nước", 899000, "https://tse4.mm.bing.net/th/id/OIP.SbxVrTEVJ5vyu1mMPrKDkwHaEV?pid=Api&P=0&h=220", "Loa di động mạnh mẽ, chống nước, âm thanh sống động, phù hợp dã ngoại.", "Thiết bị điện tử", 120, false, null, null, 60),
     new Item(9, "Bàn phím cơ RGB gaming chuyên nghiệp", 1200000, "https://tse2.mm.bing.net/th/id/OIP.1b63DDBAU-n2_5kmAwvqjwHaHa?pid=Api&P=0&h=220", "Bàn phím cơ với đèn LED RGB tùy chỉnh, switch bền bỉ, mang lại trải nghiệm gõ tuyệt vời.", "Thiết bị điện tử", 90, false, null, null, 40),
     new Item(10, "Chuột gaming không dây siêu nhẹ", 750000, "https://sp.yimg.com/ib/th/id/OIP.-xQWv5mSmsFtAIIORaUdsgHaHa?pid=Api&w=148&h=148&c=7&dpr=2&rs=1", "Chuột gaming không dây, cảm biến chính xác, thiết kế công thái học.", "Thiết bị điện tử", 180, false, null, null, 100),
@@ -152,7 +144,6 @@ const allItemsData = [
     new Item(26, "Đồng hồ thông minh theo dõi sức khỏe", 2100000, "https://cf.shopee.vn/file/74f6d6719ef3697f1e3b43e078c3516f", "Đồng hồ thông minh theo dõi nhịp tim, giấc ngủ, tập luyện thể thao, nhận thông báo.", "Đồng hồ", 250, false, null, null, 150),
 ];
 
-// Hàm khởi tạo giá bán thực tế của sản phẩm dựa trên trạng thái Flash Sale
 function initializeProductPrices() {
     allItemsData.forEach(item => {
         if (item.isFlashSale && item.isFlashSaleActive()) {
@@ -163,10 +154,8 @@ function initializeProductPrices() {
     });
 }
 
-// Gọi hàm này ngay sau khi allItemsData được định nghĩa
 initializeProductPrices();
 
-// Hàm hiển thị sản phẩm vào container
 function displayItems(items, containerId) {
     const container = document.getElementById(containerId);
     if (container) {
@@ -179,7 +168,6 @@ function displayItems(items, containerId) {
     }
 }
 
-// Hàm để tìm sản phẩm theo ID
 function findItemById(id) {
     return allItemsData.find(item => item.id == id);
 }

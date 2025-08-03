@@ -2,54 +2,26 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title> Shop Demo - Lịch Sử Mua Hàng</title>
+    <title>Shop Demo - Lịch Sử Mua Hàng</title>
     <link rel="stylesheet" href="../Css/style.css">
-    <style>
-        /* CSS để footer luôn ở cuối trang */
-        html, body {
-            height: 100%; /* Đảm bảo html và body chiếm toàn bộ chiều cao màn hình */
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            display: flex; /* Biến body thành container flex */
-            flex-direction: column; /* Sắp xếp các mục con theo cột */
-            min-height: 100vh; /* Đảm bảo body ít nhất là cao bằng viewport */
-        }
-
-        /* Đảm bảo phần nội dung chính của bạn (main) chiếm không gian còn lại */
-        main {
-            flex: 1; /* Cho phép main tự động mở rộng để lấp đầy không gian còn lại */
-            padding: 20px 0; /* Ví dụ padding, bạn có thể điều chỉnh */
-        }
-
-        .footer {
-            /* Footer sẽ tự động nằm cuối cùng */
-            background-color: #333; /* Màu nền footer, ví dụ */
-            color: white; /* Màu chữ footer, ví dụ */
-            padding: 20px;
-            text-align: center;
-            width: 100%; /* Đảm bảo footer chiếm toàn bộ chiều rộng */
-            flex-shrink: 0; /* Đảm bảo footer không co lại */
-        }
-
-        /* Các phần tử khác như header, nav sẽ giữ nguyên kích thước mặc định */
-        .header, .nav {
-            flex-shrink: 0; /* Đảm bảo chúng không co giãn */
-        }
-    </style>
 </head>
 <body>
     <header class="header">
         <div class="container">
             <a href="index.html" class="logo">
                 <img src="https://tse3.mm.bing.net/th/id/OIP.IhOrqGoCi8SNaOHRVsw-VQHaHa?pid=Api&P=0&h=220" alt="Logo Shop" height="40">
-                <span class="shop-name">Shop Demo</span> </a>
+                <span class="shop-name">Shop Demo</span>
+            </a>
             <form class="search-form" id="searchForm">
                 <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." />
                 <button type="submit">🔍</button>
             </form>
+            <div class="user-area">
+                <a href="login.html" id="loginLink">Đăng nhập</a>
+                <a href="register.html" id="registerLink">Đăng ký</a>
+                <a href="javascript:void(0);" id="logoutLink" onclick="handleLogout()" style="display:none;">Đăng xuất</a>
+                <a href="admin-panel.html" id="adminPanelLink" style="display:none;">Admin</a>
+            </div>
         </div>
     </header>
 
@@ -73,72 +45,103 @@
     </nav>
 
     <main class="history-page">
-        <div id="ordersContainer" class="orders-grid"></div>
+        <div class="container">
+            <h1>Lịch Sử Mua Hàng Của Bạn</h1>
+            <div id="ordersContainer" class="orders-grid"></div>
+        </div>
     </main>
+
     <script src="../JavaScript/products.js"></script>
     <script src="../JavaScript/searchHandler.js"></script>
-    <script src="../JavaScript/saveorder.js"></script>
     <script src="../JavaScript/cart.js"></script>
-    <script src="../JavaScript/cart-table.js"></script>
+    <script src="../JavaScript/user.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const orders = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             const container = document.getElementById("ordersContainer");
 
-            if (orders.length === 0) {
-                container.innerHTML = "<p>Chưa có đơn hàng nào.</p>";
+            // Cập nhật giao diện đăng nhập/đăng ký/đăng xuất và giỏ hàng
+            updateAuthUI();
+            updateCartCount();
+
+            if (!currentUser || !currentUser.username) { // Kiểm tra currentUser.username
+                container.innerHTML = "<p>Vui lòng <a href='login.html'>đăng nhập</a> để xem lịch sử mua hàng của bạn.</p>";
                 return;
             }
-            const allItemsData = JSON.parse(localStorage.getItem("allItemsData")) || [];
 
-            orders.forEach((order, index) => {
+            // Lấy tất cả các đơn hàng từ localStorage, sử dụng key "orders"
+            const allOrders = JSON.parse(localStorage.getItem("orders")) || [];
+            // Lọc các đơn hàng chỉ thuộc về người dùng hiện tại
+            const userOrders = allOrders.filter(order => order.userId === currentUser.username);
+
+            // Cần lấy allItemsData và tạo lại đối tượng Item để sử dụng các phương thức
+            const storedItemsData = JSON.parse(localStorage.getItem('allItemsData')) || [];
+            const allItems = storedItemsData.map(data => new Item(
+                data.id, data.name, data.price, data.imageUrl, data.description,
+                data.category, data.stock, data.isFlashSale, data.originalPrice,
+                data.salePrice, data.soldQuantity
+            ));
+
+            // Tạo một instance Item tạm thời để sử dụng getFormattedPrice
+            const tempItemInstance = new Item(0, '', 0);
+
+            if (userOrders.length === 0) {
+                container.innerHTML = "<p>Bạn chưa có đơn hàng nào.</p>";
+                return;
+            }
+
+            // Sắp xếp đơn hàng theo ngày, mới nhất trước
+            userOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+
+            userOrders.forEach((order) => {
                 const orderDiv = document.createElement("div");
                 orderDiv.className = "order-item";
 
                 let itemsHTML = "";
-                order.items.forEach(cartItem => {
-                    const itemData = allItemsData.find(p => p.id === cartItem.id);
-                    if (itemData) {
-                        itemsHTML += `
+                // Hiển thị tối đa 3 sản phẩm, sau đó thêm "..." nếu có nhiều hơn
+                const itemsToDisplay = order.items.slice(0, 3);
+                itemsToDisplay.forEach(cartItem => {
+                    // Tìm sản phẩm trong allItems (đã được chuyển thành đối tượng Item)
+                    const itemData = allItems.find(p => p.id === cartItem.id);
+                    // Dùng thông tin từ cartItem nếu itemData không tìm thấy (sản phẩm có thể đã bị xóa khỏi hệ thống)
+                    const displayItemName = itemData ? itemData.name : `Sản phẩm không khả dụng (ID: ${cartItem.id})`;
+                    const displayItemImage = itemData ? itemData.imageUrl : 'https://via.placeholder.com/50?text=No+Image'; // Placeholder image
+                    const displayItemPrice = cartItem.price; // Luôn dùng giá lưu trong đơn hàng để đảm bảo chính xác
+
+                    itemsHTML += `
                         <div class="product">
-                            <img src="${itemData.imageUrl}" alt="${itemData.name}" width="100">
+                            <img src="${displayItemImage}" alt="${displayItemName}" width="50" height="50">
                             <div class="info">
-                                <strong>${itemData.name}</strong><br>
+                                <strong>${displayItemName}</strong><br>
                                 Số lượng: ${cartItem.quantity}<br>
-                                Giá: ₫${(itemData.price * cartItem.quantity).toLocaleString("vi-VN")}
+                                Giá: ${tempItemInstance.getFormattedPrice(displayItemPrice * cartItem.quantity)}
                             </div>
                         </div>
                     `;
-                    } else {
-                        itemsHTML += `
-                        <div class="product">
-                            <div class="info">
-                                <strong>Sản phẩm không còn khả dụng (ID: ${cartItem.id})</strong><br>
-                                Số lượng: ${cartItem.quantity}<br>
-                                Giá: ₫${(cartItem.price * cartItem.quantity).toLocaleString("vi-VN")}
-                            </div>
-                        </div>
-                        `;
-                    }
                 });
 
+                if (order.items.length > 3) {
+                    itemsHTML += `<p class="more-items">... và ${order.items.length - 3} sản phẩm khác</p>`;
+                }
+
                 orderDiv.innerHTML = `
-                <div class="order-summary">
-                    <p><strong>Họ tên:</strong> ${order.name}</p>
-                    <p><strong>Địa chỉ:</strong> ${order.address}</p>
-                    <p><strong>Ngày đặt:</strong> ${order.date}</p>
-                    <button onclick="viewOrder(${index})">Xem chi tiết</button>
-                </div>
-                <div class="products">${itemsHTML}</div>
-            `;
+                    <div class="order-summary">
+                        <p><strong>Mã đơn hàng:</strong> #${order.orderId}</p>
+                        <p><strong>Ngày đặt:</strong> ${order.orderDate}</p>
+                        <p><strong>Tổng tiền:</strong> ${tempItemInstance.getFormattedPrice(order.totalAmount)}</p>
+                        <p><strong>Trạng thái:</strong> <span style="font-weight: bold; color: ${order.status === 'Đang chờ xác nhận' ? 'orange' : 'green'};">${order.status}</span></p>
+                        <button onclick="viewOrder('${order.orderId}')">Xem chi tiết</button>
+                    </div>
+                    <div class="products">${itemsHTML}</div>
+                `;
 
                 container.appendChild(orderDiv);
             });
         });
 
-        function viewOrder(index) {
-            localStorage.setItem("viewOrderIndex", index);
-            window.location.href = "purchase.html";
+        function viewOrder(orderId) {
+            localStorage.setItem("viewOrderId", orderId);
+            window.location.href = "purchase.html"; // Chuyển hướng đến trang chi tiết đơn hàng
         }
     </script>
     <footer class="footer">
