@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Demo - Quản lý sản phẩm</title>
+    <link rel="stylesheet" href="../Css/style.css">
+</head>
+<body class="admin-page">
+
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="https://tse3.mm.bing.net/th/id/OIP.IhOrqGoCi8SNaOHRVsw-VQHaHa?pid=Api&P=0&h=220" alt="Logo Shop" height="40">
+                <span class="shop-name">Shop Demo - Admin</span>
+            </a>
+            <form class="search-form" id="searchForm" style="display:none;">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm..." />
+                <button type="submit">🔍</button>
+            </form>
+            <div class="user-area">
+                <a href="javascript:void(0);" id="logoutLink" onclick="handleLogout()">Đăng xuất</a>
+                <span id="loggedInUser" style="margin-left: 10px;"></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-main-wrapper">
+        <nav class="admin-sidebar">
+            <h2>Quản lý</h2>
+            <ul>
+                <li><a href="admin-products.html" class="active">Quản lý sản phẩm</a></li>
+                <li><a href="admin-orders.html">Quản lý đơn hàng</a></li>
+                <li><a href="admin-categories.html">Quản lý danh mục</a></li>
+                <li><a href="admin-users.html">Quản lý tài khoản</a></li>
+                <li><a href="index.html">Trở về trang chủ</a></li>
+            </ul>
+        </nav>
+
+        <section class="admin-content-area">
+            <h1>Quản lý sản phẩm</h1>
+            <p>Đây là khu vực để quản lý các sản phẩm của cửa hàng. Bạn có thể thêm, sửa, xóa sản phẩm tại đây.</p>
+            
+            <button id="addProductBtn" class="submit-btn" style="margin-bottom: 20px;">Thêm sản phẩm mới</button> <div>
+                <h3>Danh sách sản phẩm</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody"> <tr>
+                            <td>1</td>
+                            <td>Sản phẩm A</td>
+                            <td>100.000 VNĐ</td>
+                            <td>50</td>
+                            <td>
+                                <button class="edit-btn">Sửa</button>
+                                <button class="delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Sản phẩm B</td>
+                            <td>250.000 VNĐ</td>
+                            <td>30</td>
+                            <td>
+                                <button class="edit-btn">Sửa</button>
+                                <button class="delete-btn">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="admin-form" id="productFormContainer" style="display:none;"> <h3 id="productFormTitle">Thêm/Sửa Sản Phẩm</h3>
+                <form id="productForm"> <input type="hidden" id="productId"> <div class="form-group">
+                        <label for="productName">Tên sản phẩm:</label>
+                        <input type="text" id="productName" name="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productPrice">Giá:</label>
+                        <input type="number" id="productPrice" name="productPrice" step="1000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productImageUrl">URL ảnh:</label>
+                        <input type="text" id="productImageUrl" name="productImageUrl" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">Mô tả:</label>
+                        <textarea id="productDescription" name="productDescription"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">Danh mục:</label>
+                        <select id="productCategory" name="productCategory" required>
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productStock">Tồn kho:</label>
+                        <input type="number" id="productStock" name="productStock" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="isFlashSale">
+                        <label for="isFlashSale">Là Flash Sale?</label>
+                    </div>
+                    <div id="flashSalePriceFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="originalPrice">Giá gốc:</label>
+                            <input type="number" id="originalPrice" name="originalPrice" step="1000">
+                        </div>
+                        <div class="form-group">
+                            <label for="salePrice">Giá khuyến mãi:</label>
+                            <input type="number" id="salePrice" name="salePrice" step="1000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="soldQuantity">Số lượng đã bán:</label>
+                        <input type="number" id="soldQuantity" name="soldQuantity" value="0">
+                    </div>
+
+                    <button type="submit" class="submit-btn">Lưu sản phẩm</button>
+                    <button type="button" id="cancelProductFormBtn" class="cancel-btn">Hủy</button> </form>
+            </div>
+
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Bản quyền © 2025 Shop Demo</p>
+            <div class="contact-links">
+                <ul>
+                    <li><a href="https://www.facebook.com/TTCSNH/" target="_blank">Facebook</a></li>
+                    <li><a href="tel:+84123456789">Số điện thoại: 08 3334 3334</a></li>
+                </ul>
+            </div>
+            <div class="contact-links">
+                <a href="policy.html" style="margin: 0 10px;">Chính sách mua hàng</a>
+                <a href="policy-protect.html" style="margin: 0 10px;">Chính sách bảo mật</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../JavaScript/products.js"></script>
+    <script src="../JavaScript/user.js"></script>
+    <script src="../JavaScript/adminProducts.js"></script>
+</body>
+</html>

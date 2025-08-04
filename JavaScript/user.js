@@ -1,10 +1,6 @@
-let users = JSON.parse(localStorage.getItem('mockUsers')) || [];
+// JavaScript/user.js
 
-if (!users.some(u => u.username === 'admin')) {
-    users.push({ id: 999, username: 'admin', passwordHash: 'hashed_admin123', role: 'admin' });
-    localStorage.setItem('mockUsers', JSON.stringify(users));
-}
-
+// BƯỚC 1: DI CHUYỂN TOÀN BỘ PHẦN KHAI BÁO CLASS USER LÊN ĐẦU FILE
 class User {
     constructor(id, username, passwordHash, role = 'user') {
         this.id = id;
@@ -86,11 +82,27 @@ class User {
     }
 }
 
+// BƯỚC 2: SAU KHI CLASS ĐÃ ĐƯỢC ĐỊNH NGHĨA, BẠN CÓ THỂ SỬ DỤNG NÓ
+let users = JSON.parse(localStorage.getItem('mockUsers')) || [];
+
+if (!users.some(u => u.username === 'admin')) {
+    users.push({ id: 999, username: 'admin', passwordHash: User.hashPassword('1'), role: 'admin' });
+    localStorage.setItem('mockUsers', JSON.stringify(users));
+}
+
+if (!users.some(u => u.username === 'user')) {
+    const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
+    users.push({ id: newId, username: 'user', passwordHash: User.hashPassword('1'), role: 'user' });
+    localStorage.setItem('mockUsers', JSON.stringify(users));
+}
+
+users = JSON.parse(localStorage.getItem('mockUsers')) || [];
+
 function updateAuthUI() {
     const loginLink = document.getElementById('loginLink');
     const registerLink = document.getElementById('registerLink');
     const logoutLink = document.getElementById('logoutLink');
-    const adminPanelLink = document.getElementById('adminPanelLink');
+    const adminProductLink = document.getElementById('adminProductLink');
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     if (loginLink && registerLink && logoutLink) {
@@ -98,15 +110,15 @@ function updateAuthUI() {
             loginLink.style.display = 'none';
             registerLink.style.display = 'none';
             logoutLink.style.display = 'inline';
-            if (adminPanelLink) {
-                adminPanelLink.style.display = User.isAdmin() ? 'inline' : 'none';
+            if (adminProductLink) {
+                adminProductLink.style.display = User.isAdmin() ? 'inline' : 'none';
             }
         } else {
             loginLink.style.display = 'inline';
             registerLink.style.display = 'inline';
             logoutLink.style.display = 'none';
-            if (adminPanelLink) {
-                adminPanelLink.style.display = 'none';
+            if (adminProductLink) {
+                adminProductLink.style.display = 'none';
             }
         }
     }
@@ -143,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
             messageElement.textContent = '';
 
             const result = await User.authenticate(username, password);
+            console.log('Kết quả xác thực:', result); // Giữ lại dòng này để kiểm tra lỗi đăng nhập
             if (result.success) {
                 User.saveCurrentUser(result.user);
                 updateAuthUI();

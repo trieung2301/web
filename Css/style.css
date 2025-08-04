@@ -38,10 +38,10 @@ main {
 }
 
 .header .shop-name {
-    color: white; 
-    font-size: 1.2em; 
+    color: white;
+    font-size: 1.2em;
     font-weight: bold;
-    white-space: nowrap; 
+    white-space: nowrap;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -313,7 +313,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    align-items: flex-end; 
+    align-items: flex-end;
 }
 .search-controls .filter-group {
     flex: 1;
@@ -1475,5 +1475,349 @@ textarea {
 
     .order-products-list .product-detail-item .info {
         width: 100%;
+    }
+}
+
+body.admin-page {
+    display: flex;
+    flex-direction: column; 
+    min-height: 100vh;
+}
+
+.admin-main-wrapper {
+    display: flex; 
+    flex: 1; 
+}
+
+.admin-sidebar {
+    width: 250px; 
+    background-color: #f4f4f4;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    position: sticky; 
+    top: 0; 
+    align-self: flex-start;
+    height: 100vh; 
+    overflow-y: auto; 
+    flex-shrink: 0;
+}
+
+.admin-sidebar h2 {
+    margin-top: 0;
+    color: #333;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.admin-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.admin-sidebar ul li a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #555;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: 500;
+}
+
+.admin-sidebar ul li a:hover,
+.admin-sidebar ul li a.active {
+    background-color: #007bff; 
+    color: white;
+}
+
+.admin-content-area {
+    flex: 1; 
+    padding: 20px;
+    background-color: #fff;
+}
+
+.admin-content-area h1 {
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    font-size: 2em;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.95em;
+}
+
+.admin-table th,
+.admin-table td {
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    text-align: left;
+}
+
+.admin-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #555;
+    text-transform: uppercase;
+}
+
+.admin-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.admin-table tr:hover {
+    background-color: #f0f0f0;
+}
+
+.admin-table button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-right: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.admin-table .edit-btn {
+    background-color: #28a745; 
+    color: white;
+}
+.admin-table .edit-btn:hover {
+    background-color: #218838;
+}
+
+.admin-table .delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+.admin-table .delete-btn:hover {
+    background-color: #c82333;
+}
+
+
+.admin-form {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+
+.admin-form .form-group {
+    margin-bottom: 15px;
+}
+
+.admin-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #444;
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="number"],
+.admin-form input[type="email"],
+.admin-form textarea,
+.admin-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.admin-form input[type="text"]:focus,
+.admin-form input[type="number"]:focus,
+.admin-form input[type="email"]:focus,
+.admin-form textarea:focus,
+.admin-form select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.admin-form button.submit-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+}
+
+.admin-form button.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+#addProductBtn {
+    padding: 12px 15px; 
+    font-size: 0.8em; 
+    background-color: #007bff; 
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px; 
+    display: block;
+    width: fit-content; 
+}
+
+#addProductBtn:hover {
+    background-color: #0056b3;
+}
+
+#cancelProductFormBtn {
+    padding: 10px 20px; 
+    font-size: 1em; 
+    background-color: #f44336; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
+
+#cancelProductFormBtn:hover {
+    background-color: #da190b;
+}
+
+.submit-btn {
+    padding: 10px 20px; 
+    font-size: 1em; 
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.submit-btn {
+    padding: 10px 20px; 
+    font-size: 1em; 
+    background-color: #007bff; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+
+@media (max-width: 992px) {
+    .admin-sidebar {
+        width: 200px; 
+    }
+    .admin-sidebar h2 {
+        font-size: 1.3em;
+    }
+    .admin-sidebar ul li a {
+        padding: 8px 10px;
+        font-size: 0.95em;
+    }
+    .admin-content-area h1 {
+        font-size: 1.8em;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-main-wrapper {
+        flex-direction: column; 
+    }
+    .admin-sidebar {
+        width: 100%; 
+        height: auto; 
+        position: static; 
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 0;
+        box-shadow: none; 
+    }
+    .admin-sidebar h2 {
+        text-align: center;
+        border-bottom: none;
+        margin-bottom: 10px;
+    }
+    .admin-sidebar ul {
+        display: flex; 
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px; 
+    }
+    .admin-sidebar ul li {
+        margin-bottom: 5px;
+    }
+    .admin-sidebar ul li a {
+        padding: 8px 12px; 
+        font-size: 0.9em;
+    }
+
+    .admin-content-area {
+        padding: 15px;
+    }
+    .admin-table th,
+    .admin-table td {
+        padding: 8px;
+        font-size: 0.85em;
+    }
+    .admin-table button {
+        padding: 6px 10px;
+        font-size: 0.8em;
+        margin-right: 3px;
+    }
+    .admin-form {
+        padding: 15px;
+    }
+    .admin-form label {
+        font-size: 0.95em;
+    }
+    .admin-form input[type="text"],
+    .admin-form input[type="number"],
+    .admin-form input[type="email"],
+    .admin-form textarea,
+    .admin-form select {
+        padding: 8px;
+    }
+    .admin-form button.submit-btn {
+        padding: 10px 15px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-sidebar ul {
+        flex-direction: column; 
+        align-items: stretch;
+    }
+    .admin-sidebar ul li a {
+        text-align: center;
+    }
+    .admin-content-area h1 {
+        font-size: 1.5em;
     }
 }
