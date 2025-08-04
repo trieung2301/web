@@ -60,6 +60,31 @@ function submitOrder() {
     const history = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
     history.push(orderInfo);
     localStorage.setItem("purchaseHistory", JSON.stringify(history));
+    const orders = JSON.parse(localStorage.getItem("orders")) || [];
+    orders.push({
+        orderId: "ORD-" + Date.now(),
+        userId: localStorage.getItem("currentUser") || "guest",
+        customerInfo: {
+            name: `${lastName} ${firstName}`,
+            phone: phone,
+            address: address
+        },
+        items: orderInfo.items.map(item => {
+            const fullItem = orderInfo.allItemsData.find(p => p.id === item.id);
+            return {
+                id: item.id,
+                name: fullItem?.name || "Sản phẩm không xác định",
+                quantity: item.quantity,
+                price: fullItem?.price || 0
+            };
+        }),
+        totalAmount: orderInfo.items.reduce((sum, item) => {
+            const fullItem = orderInfo.allItemsData.find(p => p.id === item.id);
+            return sum + (fullItem?.price || 0) * item.quantity;
+        }, 0),
+        date: new Date().toLocaleString("vi-VN")
+    });
+    localStorage.setItem("orders", JSON.stringify(orders));
 
     const selected = orderInfo.items;
     const cart = JSON.parse(localStorage.getItem("cart")) || [];

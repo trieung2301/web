@@ -4,29 +4,36 @@
 
     const cartIcon = document.getElementById('cart-icon');
     const miniCart = document.getElementById('mini-cart');
+    let hideTimeout;
 
     if (cartIcon && miniCart) {
         cartIcon.addEventListener('mouseenter', () => {
+            clearTimeout(hideTimeout);
             renderMiniCart();
             miniCart.style.display = 'block';
         });
 
         cartIcon.addEventListener('mouseleave', (e) => {
-            setTimeout(() => {
-                if (!miniCart.contains(e.relatedTarget) && !cartIcon.contains(e.relatedTarget)) {
+            hideTimeout = setTimeout(() => {
+                if (!miniCart.contains(e.relatedTarget)) {
                     miniCart.style.display = 'none';
                 }
-            }, 10);
+            }, 300); 
+        });
+
+        miniCart.addEventListener('mouseenter', () => {
+            clearTimeout(hideTimeout);
+            miniCart.style.display = 'block';
         });
 
         miniCart.addEventListener('mouseleave', () => {
-            miniCart.style.display = 'none';
-        });
-        miniCart.addEventListener('mouseenter', () => {
-            miniCart.style.display = 'block';
+            hideTimeout = setTimeout(() => {
+                miniCart.style.display = 'none';
+            }, 300);
         });
     }
 });
+
 
 function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];

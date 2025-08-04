@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Demo - Quản lý tài khoản</title>
+    <link rel="stylesheet" href="../Css/style.css">
+</head>
+<body class="admin-page">
+
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="https://tse3.mm.bing.net/th/id/OIP.IhOrqGoCi8SNaOHRVsw-VQHaHa?pid=Api&P=0&h=220" alt="Logo Shop" height="40">
+                <span class="shop-name">Shop Demo - Admin</span>
+            </a>
+            <div class="user-area">
+                <a href="javascript:void(0);" onclick="handleLogout()">Đăng xuất</a>
+                <span id="loggedInUser" style="margin-left: 10px;"></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-main-wrapper">
+        <nav class="admin-sidebar">
+            <h2>Quản lý</h2>
+            <ul>
+                <li><a href="admin-products.html">Quản lý sản phẩm</a></li>
+                <li><a href="admin-orders.html">Quản lý đơn hàng</a></li>
+                <li><a href="admin-users.html" class="active">Quản lý tài khoản</a></li>
+                <li><a href="index.html">Trở về trang chủ</a></li>
+            </ul>
+        </nav>
+
+        <section class="admin-content-area">
+            <h1>Quản lý tài khoản</h1>
+            <p>Danh sách tài khoản người dùng đã đăng ký hệ thống.</p>
+
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên đăng nhập</th>
+                        <th>Họ tên</th>
+                        <th>Email</th>
+                        <th>Vai trò</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- Dữ liệu được đổ bằng JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Bản quyền © 2025 Shop Demo</p>
+            <div class="contact-links">
+                <ul>
+                    <li><a href="https://www.facebook.com/TTCSNH/" target="_blank">Facebook</a></li>
+                    <li><a href="tel:+84123456789">SĐT: 08 3334 3334</a></li>
+                </ul>
+            </div>
+            <div class="contact-links">
+                <a href="policy.html" style="margin: 0 10px;">Chính sách mua hàng</a>
+                <a href="policy-protect.html" style="margin: 0 10px;">Chính sách bảo mật</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../JavaScript/user.js"></script>
+    <script src="../JavaScript/adminUsers.js"></script>
+</body>
+</html>
