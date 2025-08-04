@@ -1,6 +1,4 @@
-﻿// JavaScript/cart.js
-
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
     renderMiniCart();
 
@@ -9,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (cartIcon && miniCart) {
         cartIcon.addEventListener('mouseenter', () => {
-            renderMiniCart(); 
+            renderMiniCart();
             miniCart.style.display = 'block';
         });
 
@@ -18,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!miniCart.contains(e.relatedTarget) && !cartIcon.contains(e.relatedTarget)) {
                     miniCart.style.display = 'none';
                 }
-            }, 10); 
+            }, 10);
         });
 
         miniCart.addEventListener('mouseleave', () => {
@@ -65,7 +63,8 @@ function renderMiniCart() {
 
         let itemHtml = '';
         if (matchedItem) {
-            const itemTotal = matchedItem.price * cartItem.quantity;
+            const itemPrice = matchedItem.isFlashSale ? matchedItem.salePrice : matchedItem.price;
+            const itemTotal = itemPrice * cartItem.quantity;
             totalPrice += itemTotal;
             itemHtml = `
                 <div class="mini-cart-item" style="display: flex; align-items: center; margin-bottom: 10px;">
@@ -74,12 +73,12 @@ function renderMiniCart() {
                     <div class="mini-cart-info" style="flex-grow: 1;">
                         <p style="margin: 0;"><strong>${matchedItem.name}</strong></p>
                         <p style="margin: 0; font-size: 0.9em; color: #555;">SL: ${cartItem.quantity}</p>
-                        <p style="margin: 0; font-size: 0.9em; color: #555;">Giá: ${tempItemInstance.getFormattedPrice(matchedItem.price)}</p>
+                        <p style="margin: 0; font-size: 0.9em; color: #555;">Giá: ${tempItemInstance.getFormattedPrice(itemPrice)}</p>
                     </div>
                 </div>
             `;
         } else {
-            const fallbackPrice = cartItem.price || 0; 
+            const fallbackPrice = cartItem.price || 0;
             totalPrice += fallbackPrice * cartItem.quantity;
 
             itemHtml = `
@@ -110,11 +109,6 @@ function renderMiniCart() {
     `;
 }
 
-/**
- * Thêm sản phẩm vào giỏ hàng và cập nhật số lượng tồn kho.
- * @param {number} productId 
- * @param {number} quantity Số lượng sản phẩm muốn thêm (mặc định là 1).
- */
 function addToCart(productId, quantity = 1) {
     let allItemsData = JSON.parse(localStorage.getItem('allItemsData')) || [];
 
@@ -154,7 +148,7 @@ function addToCart(productId, quantity = 1) {
             cart.push({
                 id: productId,
                 quantity: quantity,
-                price: productToUpdate.price 
+                price: productToUpdate.price
             });
             alert(`Đã thêm ${productToUpdate.name} vào giỏ hàng.`);
         } else {
@@ -166,4 +160,36 @@ function addToCart(productId, quantity = 1) {
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
     renderMiniCart();
+}
+
+function checkout() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log('cart.js - checkout(): Giá trị currentUser khi nhấn Mua Hàng:', currentUser);
+
+    if (!currentUser) {
+        alert('Vui lòng đăng nhập để tiếp tục mua hàng.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    const selectedRows = document.querySelectorAll('#cartBody input[type="checkbox"]:checked');
+    const selectedItems = [];
+    selectedRows.forEach(checkbox => {
+        const row = checkbox.closest('tr');
+        if (row) {
+            const productId = row.dataset.productId;
+            const quantity = parseInt(row.querySelector('.quantity-input').value);
+            const itemPrice = parseFloat(row.dataset.itemPrice);
+            selectedItems.push({ id: productId, quantity: quantity, price: itemPrice });
+        }
+    });
+
+    if (selectedItems.length === 0) {
+        alert('Vui lòng chọn ít nhất một sản phẩm để mua hàng.');
+        return;
+    }
+
+    localStorage.setItem('checkoutItems', JSON.stringify(selectedItems));
+
+    window.location.href = 'checkout.html';
 }

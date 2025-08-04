@@ -1,5 +1,3 @@
-// JavaScript/user.js
-
 let users = JSON.parse(localStorage.getItem('mockUsers')) || [];
 
 if (!users.some(u => u.username === 'admin')) {
@@ -74,6 +72,8 @@ class User {
 
     static clearCurrentUser() {
         localStorage.removeItem('currentUser');
+        console.log('User.clearCurrentUser: currentUser ĐÃ được xóa khỏi localStorage.');
+        console.log('User.clearCurrentUser: Giá trị localStorage.getItem("currentUser") sau khi xóa:', localStorage.getItem('currentUser'));
     }
 
     static getCurrentUserRole() {
@@ -122,9 +122,11 @@ function updateAuthUI() {
 }
 
 function handleLogout() {
+    console.log('handleLogout: Bắt đầu quá trình đăng xuất.');
     User.clearCurrentUser();
     updateAuthUI();
     alert('Bạn đã đăng xuất.');
+    console.log('handleLogout: Đã hoàn tất đăng xuất và chuyển hướng.');
     window.location.href = 'index.html';
 }
 

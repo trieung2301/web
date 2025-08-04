@@ -6,8 +6,13 @@ function renderCartTable() {
     const cartTotalEl = document.getElementById('cartTotal');
     const selectAllCheckbox = document.getElementById('selectAllCheckbox');
 
-    cartBody.innerHTML = ''; 
-    let total = 0; 
+    if (!cartBody) {
+        console.error("Lỗi: Không tìm thấy phần tử có id 'cartBody'. Vui lòng đảm bảo nó tồn tại trong HTML.");
+        return;
+    }
+
+    cartBody.innerHTML = '';
+    let total = 0;
 
     const storedItemsData = JSON.parse(localStorage.getItem('allItemsData')) || [];
     const allItems = storedItemsData.map(data => new Item(
@@ -19,8 +24,8 @@ function renderCartTable() {
     if (cartItems.length === 0) {
         cartBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Giỏ hàng trống</td></tr>';
         if (cartTotalEl) cartTotalEl.textContent = '₫0';
-        if (selectAllCheckbox) selectAllCheckbox.checked = false; 
-        updateSummary(); 
+        if (selectAllCheckbox) selectAllCheckbox.checked = false;
+        updateSummary();
         return;
     }
 
@@ -33,11 +38,11 @@ function renderCartTable() {
         }
 
         const quantity = cartItem.quantity;
-        const subtotal = item.price * quantity; 
+        const subtotal = item.price * quantity;
         total += subtotal;
 
-        const isOutOfStock = item.stock <= 0; 
-        const quantityExceedsStock = quantity > item.stock && item.stock > 0; 
+        const isOutOfStock = item.stock <= 0;
+        const quantityExceedsStock = quantity > item.stock && item.stock > 0;
 
         let outOfStockText = '';
         let quantityWarningText = '';
@@ -46,7 +51,7 @@ function renderCartTable() {
         if (isOutOfStock) {
             outOfStockText = `<div class="out-of-stock" style="color: red; font-size: 0.8em;">Hết hàng!</div>`;
             disableCheckbox = true;
-            cartItem.autoSelected = false; 
+            cartItem.autoSelected = false;
         } else if (quantityExceedsStock) {
             quantityWarningText = `<div class="quantity-warning" style="color: orange; font-size: 0.8em;">Chỉ còn ${item.stock} sản phẩm!</div>`;
         }
@@ -88,16 +93,16 @@ function renderCartTable() {
 
     attachCheckboxListeners();
     attachQuantityListeners();
-    updateSummary(); 
+    updateSummary();
 }
 
 function removeFromCart(index) {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     if (index >= 0 && index < cart.length) {
-        cart.splice(index, 1); 
+        cart.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(cart));
-        renderCartTable(); 
-        updateCartCount(); 
+        renderCartTable();
+        updateCartCount();
     }
 }
 
@@ -108,13 +113,13 @@ function toggleSelectAll(checkbox) {
             cb.checked = checkbox.checked;
         }
     });
-    updateSummary(); 
+    updateSummary();
 }
 
 function attachCheckboxListeners() {
     const checkboxes = document.querySelectorAll('.item-checkbox');
     checkboxes.forEach(cb => {
-        cb.removeEventListener('change', updateSummary); 
+        cb.removeEventListener('change', updateSummary);
         cb.addEventListener('change', updateSummary);
     });
 }
@@ -122,7 +127,7 @@ function attachCheckboxListeners() {
 function attachQuantityListeners() {
     const quantityInputs = document.querySelectorAll('.item-quantity');
     quantityInputs.forEach(input => {
-        input.removeEventListener('change', handleQuantityChange); 
+        input.removeEventListener('change', handleQuantityChange);
         input.addEventListener('change', handleQuantityChange);
     });
 }
@@ -151,15 +156,15 @@ function handleQuantityChange(e) {
 
     if (isNaN(newQuantity) || newQuantity < 1) {
         alert("Số lượng không hợp lệ. Vui lòng nhập số lượng lớn hơn 0.");
-        input.value = cartItem.quantity; 
+        input.value = cartItem.quantity;
         return;
     }
 
     if (newQuantity > product.stock) {
         alert(`Số lượng bạn muốn mua (${newQuantity}) vượt quá số lượng tồn kho (${product.stock}) của sản phẩm "${product.name}".`);
-        newQuantity = product.stock; 
+        newQuantity = product.stock;
         input.value = newQuantity;
-        if (newQuantity === 0) { 
+        if (newQuantity === 0) {
             const checkbox = document.querySelector(`.item-checkbox[data-index="${index}"]`);
             if (checkbox) {
                 checkbox.checked = false;
@@ -171,7 +176,7 @@ function handleQuantityChange(e) {
     cart[index].quantity = newQuantity;
     localStorage.setItem('cart', JSON.stringify(cart));
 
-    renderCartTable(); 
+    renderCartTable();
 }
 
 function updateSummary() {
@@ -188,15 +193,15 @@ function updateSummary() {
     ));
 
     checkboxes.forEach(cb => {
-        if (cb.checked && !cb.disabled) { 
+        if (cb.checked && !cb.disabled) {
             const index = parseInt(cb.getAttribute('data-index'));
             const cartItem = cart[index];
-            
+
             const item = allItems.find(p => p.id === cartItem.id);
 
-            if (item) { 
+            if (item) {
                 totalItems += cartItem.quantity;
-                totalAmount += item.price * cartItem.quantity; 
+                totalAmount += item.price * cartItem.quantity;
             }
         }
     });
@@ -209,6 +214,15 @@ function updateSummary() {
 }
 
 function checkout() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log('cart-table.js - checkout(): Giá trị currentUser khi nhấn Mua Hàng:', currentUser);
+
+    if (!currentUser) {
+        alert('Vui lòng đăng nhập để tiếp tục mua hàng.');
+        window.location.href = 'login.html';
+        return;
+    }
+
     const checkboxes = document.querySelectorAll('#cartBody input[type="checkbox"]:checked');
     if (checkboxes.length === 0) {
         alert("Vui lòng chọn ít nhất một sản phẩm để mua.");
@@ -222,7 +236,7 @@ function checkout() {
         const row = checkbox.closest('tr');
         const index = parseInt(row.getAttribute('data-index'));
         const selectedItem = cart[index];
-        
+
         if (selectedItem && !checkbox.disabled) {
             selectedItems.push(selectedItem);
         }
@@ -238,5 +252,5 @@ function checkout() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    renderCartTable(); 
+    renderCartTable();
 });
