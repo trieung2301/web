@@ -5,7 +5,6 @@ let countdownInterval;
 function updateCountdown() {
     const now = new Date().getTime();
     
-    // Kiểm tra nếu GLOBAL_FLASH_SALE_END_TIME không tồn tại hoặc là null (Flash Sale bị tắt)
     if (typeof GLOBAL_FLASH_SALE_END_TIME === 'undefined' || GLOBAL_FLASH_SALE_END_TIME === null) {
         handleFlashSaleEndedOrInactive();
         return;

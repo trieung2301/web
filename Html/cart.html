@@ -4,110 +4,25 @@
     <meta charset="UTF-8">
     <title>Shop Demo - Giỏ Hàng</title>
     <link rel="stylesheet" href="../Css/style.css">
-<style>
-        /* CSS để footer luôn ở cuối trang */
-        html, body {
-            height: 100%; /* Đảm bảo html và body chiếm toàn bộ chiều cao màn hình */
-            margin: 0;
-            padding: 0;
-        }
 
-        body {
-            display: flex; /* Biến body thành container flex */
-            flex-direction: column; /* Sắp xếp các mục con theo cột */
-            min-height: 100vh; /* Đảm bảo body ít nhất là cao bằng viewport */
-        }
-
-        /* Đảm bảo phần nội dung chính của bạn (main) chiếm không gian còn lại */
-        main {
-            flex: 1; /* Cho phép main tự động mở rộng để lấp đầy không gian còn lại */
-            padding: 20px 0; /* Ví dụ padding, bạn có thể điều chỉnh */
-        }
-
-        .footer {
-            /* Footer sẽ tự động nằm cuối cùng */
-            background-color: #333; /* Màu nền footer, ví dụ */
-            color: white; /* Màu chữ footer, ví dụ */
-            padding: 20px;
-            text-align: center;
-            width: 100%; /* Đảm bảo footer chiếm toàn bộ chiều rộng */
-            flex-shrink: 0; /* Đảm bảo footer không co lại */
-        }
-
-        /* Các phần tử khác như header, nav sẽ giữ nguyên kích thước mặc định */
-        .header, .nav {
-            flex-shrink: 0; /* Đảm bảo chúng không co giãn */
-        }
-
-        /* Bổ sung CSS cho phần tổng cộng giỏ hàng để nó hiển thị rõ ràng */
-        .cart-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            border-top: 1px solid #eee;
-            background-color: #f9f9f9;
-            margin-top: 20px; /* Tạo khoảng cách với bảng giỏ hàng */
-            border-radius: 5px;
-        }
-
-        .cart-footer label {
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-        }
-
-        .cart-footer #selectAll {
-            margin-right: 10px;
-        }
-
-        .cart-footer #cartSummary {
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-
-        .cart-footer .checkout-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .cart-footer .checkout-btn:hover {
-            background-color: #0056b3;
-        }
-
-        /* Đảm bảo bảng giỏ hàng có chiều rộng hợp lý */
-        #cartTable {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px; /* Khoảng cách với cart-footer */
-        }
-
-        #cartTable th, #cartTable td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        #cartTable th {
-            background-color: #f2f2f2;
-        }
-    </style>
 </head>
 <body>
     <header class="header">
         <div class="container">
             <a href="index.html" class="logo">
                 <img src="https://tse3.mm.bing.net/th/id/OIP.IhOrqGoCi8SNaOHRVsw-VQHaHa?pid=Api&P=0&h=220" alt="Logo Shop" height="40">
-                <span class="shop-name">Shop Demo</span> </a>
+                <span class="shop-name">Shop Demo</span>
+            </a>
             <form class="search-form" id="searchForm">
                 <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." />
                 <button type="submit">🔍</button>
             </form>
+            <div class="user-area">
+                <a href="login.html" id="loginLink">Đăng nhập</a>
+                <a href="register.html" id="registerLink">Đăng ký</a>
+                <a href="javascript:void(0);" id="logoutLink" onclick="handleLogout()" style="display:none;">Đăng xuất</a>
+                <a href="admin-panel.html" id="adminPanelLink" style="display:none;">Admin</a>
+            </div>
         </div>
     </header>
 
@@ -183,4 +98,5 @@
     <script src="../JavaScript/searchHandler.js"></script>
     <script src="../JavaScript/cart.js"></script>
     <script src="../JavaScript/cart-table.js"></script>
+    <script src="../JavaScript/user.js"></script>
 </html>

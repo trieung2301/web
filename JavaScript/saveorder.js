@@ -1,4 +1,6 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+﻿// JavaScript/saveorder.js
+
+document.addEventListener('DOMContentLoaded', () => {
     const viewOrderId = localStorage.getItem('viewOrderId');
     const checkoutForm = document.getElementById('checkoutForm');
     const orderDetailsContainer = document.getElementById('orderDetailsContainer');

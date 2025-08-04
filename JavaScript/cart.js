@@ -1,46 +1,35 @@
 ﻿// JavaScript/cart.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Khởi tạo giỏ hàng và mini-cart khi trang tải
     updateCartCount();
-    renderMiniCart(); // Đảm bảo mini-cart hiển thị đúng ngay từ đầu
+    renderMiniCart();
 
     const cartIcon = document.getElementById('cart-icon');
     const miniCart = document.getElementById('mini-cart');
 
     if (cartIcon && miniCart) {
-        // Hiển thị mini-cart khi di chuột vào biểu tượng giỏ hàng
         cartIcon.addEventListener('mouseenter', () => {
-            renderMiniCart(); // Cập nhật nội dung mini-cart mỗi khi hiển thị
+            renderMiniCart(); 
             miniCart.style.display = 'block';
         });
 
-        // Ẩn mini-cart khi di chuột ra khỏi biểu tượng giỏ hàng (nếu không di sang mini-cart)
         cartIcon.addEventListener('mouseleave', (e) => {
-            // Kiểm tra xem con trỏ chuột có di vào mini-cart không
-            // Dùng setTimeout để tạo độ trễ nhỏ, tránh nhấp nháy khi di nhanh qua
             setTimeout(() => {
                 if (!miniCart.contains(e.relatedTarget) && !cartIcon.contains(e.relatedTarget)) {
                     miniCart.style.display = 'none';
                 }
-            }, 100); // 100ms delay
+            }, 10); 
         });
 
-        // Ẩn mini-cart khi di chuột ra khỏi mini-cart
         miniCart.addEventListener('mouseleave', () => {
             miniCart.style.display = 'none';
         });
-
-        // Giữ mini-cart hiển thị khi di chuột vào mini-cart
         miniCart.addEventListener('mouseenter', () => {
             miniCart.style.display = 'block';
         });
     }
 });
 
-/**
- * Cập nhật số lượng sản phẩm trên biểu tượng giỏ hàng.
- */
 function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
@@ -50,26 +39,18 @@ function updateCartCount() {
     }
 }
 
-/**
- * Render nội dung của mini-cart (giỏ hàng nhỏ) trong header.
- * Lấy dữ liệu sản phẩm từ allItemsData trong localStorage.
- */
 function renderMiniCart() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const miniCart = document.getElementById('mini-cart');
 
     if (!miniCart) return;
 
-    // Lấy dữ liệu sản phẩm từ localStorage (đã được lưu bởi products.js)
     const storedItemsData = JSON.parse(localStorage.getItem('allItemsData')) || [];
-    // Chuyển đổi dữ liệu thô thành các đối tượng Item để sử dụng các phương thức của lớp
     const allItems = storedItemsData.map(data => new Item(
         data.id, data.name, data.price, data.imageUrl, data.description,
         data.category, data.stock, data.isFlashSale, data.originalPrice,
         data.salePrice, data.soldQuantity
     ));
-
-    // Tạo một instance Item tạm thời để sử dụng getFormattedPrice cho tổng tiền
     const tempItemInstance = new Item(0, '', 0);
 
     if (cart.length === 0) {
@@ -80,7 +61,6 @@ function renderMiniCart() {
     let totalPrice = 0;
 
     const itemsHTML = cart.map(cartItem => {
-        // Tìm sản phẩm trong danh sách allItems đã được chuyển thành đối tượng Item
         const matchedItem = allItems.find(p => p.id == cartItem.id);
 
         let itemHtml = '';
@@ -99,9 +79,7 @@ function renderMiniCart() {
                 </div>
             `;
         } else {
-            // Sản phẩm không tìm thấy, hiển thị thông báo
-            // Vẫn có thể cộng giá nếu cartItem có lưu giá (ví dụ: từ lần thêm trước)
-            const fallbackPrice = cartItem.price || 0; // Sử dụng giá đã lưu trong cartItem nếu có
+            const fallbackPrice = cartItem.price || 0; 
             totalPrice += fallbackPrice * cartItem.quantity;
 
             itemHtml = `
@@ -134,14 +112,12 @@ function renderMiniCart() {
 
 /**
  * Thêm sản phẩm vào giỏ hàng và cập nhật số lượng tồn kho.
- * @param {number} productId ID của sản phẩm cần thêm.
+ * @param {number} productId 
  * @param {number} quantity Số lượng sản phẩm muốn thêm (mặc định là 1).
  */
 function addToCart(productId, quantity = 1) {
-    // Lấy dữ liệu sản phẩm từ localStorage
     let allItemsData = JSON.parse(localStorage.getItem('allItemsData')) || [];
 
-    // Tạo lại các đối tượng Item từ dữ liệu thô để đảm bảo các phương thức được bảo toàn
     const allItems = allItemsData.map(data => new Item(
         data.id, data.name, data.price, data.imageUrl, data.description,
         data.category, data.stock, data.isFlashSale, data.originalPrice,
@@ -166,7 +142,6 @@ function addToCart(productId, quantity = 1) {
     const existingItemIndex = cart.findIndex(item => item.id === productId);
 
     if (existingItemIndex > -1) {
-        // Sản phẩm đã có trong giỏ hàng, tăng số lượng
         if (cart[existingItemIndex].quantity + quantity <= productToUpdate.stock) {
             cart[existingItemIndex].quantity += quantity;
             alert(`Đã tăng số lượng ${productToUpdate.name} trong giỏ hàng lên ${cart[existingItemIndex].quantity}.`);
@@ -175,14 +150,11 @@ function addToCart(productId, quantity = 1) {
             return;
         }
     } else {
-        // Sản phẩm chưa có trong giỏ hàng, thêm mới
         if (quantity <= productToUpdate.stock) {
-            // Khi thêm vào giỏ hàng, lưu cả giá hiện tại của sản phẩm vào cartItem
-            // để đảm bảo giá trong giỏ hàng không bị thay đổi nếu giá sản phẩm gốc thay đổi
             cart.push({
                 id: productId,
                 quantity: quantity,
-                price: productToUpdate.price // Lưu giá tại thời điểm thêm vào giỏ
+                price: productToUpdate.price 
             });
             alert(`Đã thêm ${productToUpdate.name} vào giỏ hàng.`);
         } else {
@@ -193,5 +165,5 @@ function addToCart(productId, quantity = 1) {
 
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
-    renderMiniCart(); // Cập nhật mini-cart ngay lập tức sau khi thêm sản phẩm
+    renderMiniCart();
 }

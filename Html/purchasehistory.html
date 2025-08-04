@@ -55,26 +55,23 @@
     <script src="../JavaScript/searchHandler.js"></script>
     <script src="../JavaScript/cart.js"></script>
     <script src="../JavaScript/user.js"></script>
+    <script src="../JavaScript/user.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             const container = document.getElementById("ordersContainer");
 
-            // Cập nhật giao diện đăng nhập/đăng ký/đăng xuất và giỏ hàng
             updateAuthUI();
             updateCartCount();
 
-            if (!currentUser || !currentUser.username) { // Kiểm tra currentUser.username
+            if (!currentUser || !currentUser.username) {
                 container.innerHTML = "<p>Vui lòng <a href='login.html'>đăng nhập</a> để xem lịch sử mua hàng của bạn.</p>";
                 return;
             }
 
-            // Lấy tất cả các đơn hàng từ localStorage, sử dụng key "orders"
             const allOrders = JSON.parse(localStorage.getItem("orders")) || [];
-            // Lọc các đơn hàng chỉ thuộc về người dùng hiện tại
             const userOrders = allOrders.filter(order => order.userId === currentUser.username);
-
-            // Cần lấy allItemsData và tạo lại đối tượng Item để sử dụng các phương thức
+        
             const storedItemsData = JSON.parse(localStorage.getItem('allItemsData')) || [];
             const allItems = storedItemsData.map(data => new Item(
                 data.id, data.name, data.price, data.imageUrl, data.description,
@@ -82,7 +79,6 @@
                 data.salePrice, data.soldQuantity
             ));
 
-            // Tạo một instance Item tạm thời để sử dụng getFormattedPrice
             const tempItemInstance = new Item(0, '', 0);
 
             if (userOrders.length === 0) {
@@ -90,7 +86,6 @@
                 return;
             }
 
-            // Sắp xếp đơn hàng theo ngày, mới nhất trước
             userOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
 
             userOrders.forEach((order) => {
@@ -98,16 +93,12 @@
                 orderDiv.className = "order-item";
 
                 let itemsHTML = "";
-                // Hiển thị tối đa 3 sản phẩm, sau đó thêm "..." nếu có nhiều hơn
                 const itemsToDisplay = order.items.slice(0, 3);
                 itemsToDisplay.forEach(cartItem => {
-                    // Tìm sản phẩm trong allItems (đã được chuyển thành đối tượng Item)
                     const itemData = allItems.find(p => p.id === cartItem.id);
-                    // Dùng thông tin từ cartItem nếu itemData không tìm thấy (sản phẩm có thể đã bị xóa khỏi hệ thống)
                     const displayItemName = itemData ? itemData.name : `Sản phẩm không khả dụng (ID: ${cartItem.id})`;
                     const displayItemImage = itemData ? itemData.imageUrl : 'https://via.placeholder.com/50?text=No+Image'; // Placeholder image
-                    const displayItemPrice = cartItem.price; // Luôn dùng giá lưu trong đơn hàng để đảm bảo chính xác
-
+                    const displayItemPrice = cartItem.price; 
                     itemsHTML += `
                         <div class="product">
                             <img src="${displayItemImage}" alt="${displayItemName}" width="50" height="50">
@@ -141,7 +132,7 @@
 
         function viewOrder(orderId) {
             localStorage.setItem("viewOrderId", orderId);
-            window.location.href = "purchase.html"; // Chuyển hướng đến trang chi tiết đơn hàng
+            window.location.href = "purchase.html";
         }
     </script>
     <footer class="footer">

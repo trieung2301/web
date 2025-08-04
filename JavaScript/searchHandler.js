@@ -1,4 +1,4 @@
-//Xử lý form tìm kiếm ở header (có trên mọi trang).
+// searchHandler.js
 
 document.addEventListener('DOMContentLoaded', () => {
     const searchForm = document.getElementById('searchForm');
@@ -6,14 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (searchForm && searchInput) {
         searchForm.addEventListener('submit', (event) => {
-            event.preventDefault(); // Ngăn chặn form submit mặc định
+            event.preventDefault();
 
             const query = searchInput.value.trim();
             if (query) {
-                // Chuyển hướng đến trang search-results.html với query trên URL
                 window.location.href = `search-results.html?query=${encodeURIComponent(query)}`;
             } else {
-                // Nếu ô tìm kiếm trống, vẫn chuyển hướng nhưng không có query
                 window.location.href = `search-results.html`;
             }
         });

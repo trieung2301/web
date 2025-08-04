@@ -1,4 +1,3 @@
-//Xử lý hiển thị và lọc kết quả trên trang search-results.html
 // JavaScript/searchResults.js
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,12 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyFiltersBtn = document.getElementById('applyFiltersBtn');
     const resetFiltersBtn = document.getElementById('resetFiltersBtn');
 
-    // Hàm để điền các tùy chọn danh mục vào select box
     function populateCategories() {
         const categories = [...new Set(allItemsData.map(item => item.category))];
-        categoryFilter.innerHTML = '<option value="">Tất cả</option>'; // Luôn có tùy chọn "Tất cả"
+        categoryFilter.innerHTML = '<option value="">Tất cả</option>'; 
         categories.forEach(category => {
-            if (category) { // Đảm bảo category không rỗng
+            if (category) { 
                 const option = document.createElement('option');
                 option.value = category;
                 option.textContent = category;
@@ -29,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Hàm hiển thị sản phẩm
     function renderProducts(productsToDisplay) {
         productGrid.innerHTML = '';
         if (productsToDisplay.length === 0) {
@@ -42,10 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Hàm thực hiện tìm kiếm và lọc
     function performSearch() {
-        let filteredItems = [...allItemsData]; // Bắt đầu với tất cả sản phẩm
-
+        let filteredItems = [...allItemsData];
         const query = searchQueryFilter.value.toLowerCase().trim();
         const category = categoryFilter.value;
         const minPrice = parseFloat(minPriceFilter.value);
@@ -53,40 +48,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const sortOrder = sortOrderFilter.value;
         const isFlashSaleOnly = flashSaleFilter.checked;
 
-        // Lọc theo tên sản phẩm
         if (query) {
             filteredItems = filteredItems.filter(item =>
                 item.name.toLowerCase().includes(query)
             );
         }
-
-        // Lọc theo danh mục
         if (category) {
             filteredItems = filteredItems.filter(item =>
                 item.category === category
             );
         }
-
-        // Lọc theo khoảng giá
         if (!isNaN(minPrice)) {
             filteredItems = filteredItems.filter(item => item.price >= minPrice);
         }
         if (!isNaN(maxPrice)) {
             filteredItems = filteredItems.filter(item => item.price <= maxPrice);
         }
-
-        // Lọc theo đang giảm giá (Flash Sale)
         if (isFlashSaleOnly) {
             filteredItems = filteredItems.filter(item => item.isFlashSale && item.isFlashSaleActive());
         }
 
-        // Sắp xếp
         if (sortOrder) {
             filteredItems.sort((a, b) => {
                 let priceA = a.price;
                 let priceB = b.price;
 
-                // Nếu là flash sale đang hoạt động, sử dụng salePrice để sắp xếp
                 if (a.isFlashSale && a.isFlashSaleActive() && a.salePrice !== null) {
                     priceA = a.salePrice;
                 }
@@ -106,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProducts(filteredItems);
     }
 
-    // Hàm đọc URL parameters và điền vào các bộ lọc
     function loadFiltersFromUrl() {
         const urlParams = new URLSearchParams(window.location.search);
 
@@ -130,11 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sortOrder) sortOrderFilter.value = sortOrder;
         if (flashSale === 'true') flashSaleFilter.checked = true;
 
-        // Sau khi điền, thực hiện tìm kiếm ban đầu
         performSearch();
     }
 
-    // Hàm cập nhật URL parameters khi áp dụng bộ lọc
     function updateUrlParams() {
         const params = new URLSearchParams();
 
@@ -158,16 +141,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const newUrl = `${window.location.pathname}?${params.toString()}`;
-        window.history.pushState({ path: newUrl }, '', newUrl); // Cập nhật URL mà không reload trang
+        window.history.pushState({ path: newUrl }, '', newUrl); 
     }
 
-    // Xử lý sự kiện khi nút "Áp dụng bộ lọc" được click
     applyFiltersBtn.addEventListener('click', () => {
         updateUrlParams();
         performSearch();
     });
 
-    // Xử lý sự kiện khi nút "Đặt lại bộ lọc" được click
     resetFiltersBtn.addEventListener('click', () => {
         searchQueryFilter.value = '';
         categoryFilter.value = '';
@@ -175,12 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
         maxPriceFilter.value = '';
         sortOrderFilter.value = '';
         flashSaleFilter.checked = false;
-        updateUrlParams(); // Cập nhật URL để loại bỏ params
-        performSearch(); // Thực hiện tìm kiếm lại với các bộ lọc trống
+        updateUrlParams(); 
+        performSearch(); 
     });
 
 
-    // Khởi tạo trang: điền danh mục và tải bộ lọc từ URL
     populateCategories();
     loadFiltersFromUrl();
 });

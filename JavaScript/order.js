@@ -1,11 +1,12 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+﻿// JavaScript/order.js
+
+document.addEventListener('DOMContentLoaded', () => {
     const selectedItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
     const allItemsData = JSON.parse(localStorage.getItem('allItemsData')) || [];
 
     const itemsBody = document.getElementById('itemsBody');
     const totalPriceEl = document.getElementById('totalPrice');
-    const subtotalSpan = document.getElementById('subtotal'); // nếu có
-
+    const subtotalSpan = document.getElementById('subtotal');
     if (selectedItems.length === 0) {
         itemsBody.innerHTML = '<tr><td colspan="5">Không có sản phẩm nào được chọn.</td></tr>';
         totalPriceEl.textContent = '₫0';
@@ -47,7 +48,6 @@ function submitOrder() {
         return;
     }
 
-    // Thông tin đơn hàng
     const orderInfo = {
         name: `${lastName} ${firstName}`,
         phone,
@@ -57,13 +57,10 @@ function submitOrder() {
         items: JSON.parse(localStorage.getItem("selectedItems")) || [],
         allItemsData: JSON.parse(localStorage.getItem("allItemsData")) || [],
     };
-
-    // Lưu vào history
     const history = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
     history.push(orderInfo);
     localStorage.setItem("purchaseHistory", JSON.stringify(history));
 
-    // Cập nhật giỏ hàng
     const selected = orderInfo.items;
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     if (selected.length === cart.length) {
