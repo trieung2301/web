@@ -261,7 +261,11 @@ function deleteProduct(id) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    
+    if (!currentUser || currentUser.role !== 'admin') {
+        alert('Bạn không có quyền truy cập trang này. Vui lòng đăng nhập với tài khoản admin.');
+        window.location.href = 'login.html';
+        return;
+    }
 
     loadProducts();
     renderAdminProductTable();
