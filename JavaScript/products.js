@@ -111,7 +111,7 @@ class Item {
     }
 }
 
-const GLOBAL_FLASH_SALE_END_TIME = new Date(2025, 8 - 1, 8, 19, 59, 59).toISOString();
+const GLOBAL_FLASH_SALE_END_TIME = new Date(2025, 8 - 1, 10, 19, 59, 59).toISOString();
 
 // Sửa đổi phần này để tải dữ liệu từ localStorage
 let allItemsData = [];
@@ -199,4 +199,5 @@ function getUrlParameter(name) {
     var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
     var results = regex.exec(location.search);
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+
 }
